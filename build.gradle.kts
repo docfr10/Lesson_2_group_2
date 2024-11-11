@@ -1,4 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// В данном файле содержутся зависимости(ссылки на библиотеки), которые используются ВО ВСЕМ ПРОЕКТЕ
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
