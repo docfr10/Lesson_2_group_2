@@ -2,6 +2,10 @@ package com.example.lesson_2_group_2
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +16,11 @@ import androidx.core.view.WindowInsetsCompat
 class MainActivity : AppCompatActivity() {
     // Свойство, хранящее значение того было ли показано информационное сообщение пользователю
     private var toast: Boolean = false
+
+    // Метод, который будет запущен при нажатии на кнопку через xml параметр onClick
+    fun clickButton2(v: View) {
+        Toast.makeText(this, "Кнопка нажата через параметр onClick", Toast.LENGTH_SHORT).show()
+    }
 
     // Метод onCreate - запускается самым первым при старте активности, либо после вызова onPause
     // Создает объекты пользовательского интерфейса перед показом пользователю
@@ -45,6 +54,29 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Привет пользователь", Toast.LENGTH_SHORT).show()
             toast = true
         }
+
+        // Создание объектов пользовательского интерфейса
+        val textView: TextView = findViewById(R.id.textView)
+        val textView2: TextView = findViewById(R.id.textView2)
+        val button = findViewById<Button>(R.id.button)
+        val imageView = findViewById<ImageView>(R.id.imageView)
+
+        // Работа с элементами пользовательского интерфейса в коде
+        // Замена текста в TextView
+        textView.text = getString(R.string.app_name)
+        textView2.setText("Again new text")
+
+        // Замена текста в Button
+        button.text = "Click!"
+
+        // Слушатель нажатий в Button
+        button.setOnClickListener {
+            Toast.makeText(this, "Кнопка нажата!", Toast.LENGTH_SHORT).show()
+            button.text = "Button"
+        }
+
+        // Смена изображения в ImageView
+        imageView.setImageResource(R.drawable.ic_launcher_background)
     }
 
     // Метод onStart - запускается после onCreate
