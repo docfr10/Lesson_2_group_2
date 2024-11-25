@@ -12,6 +12,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.lesson_2_group_2.databinding.ActivityMainBinding
 
 // Класс MainActivity, наследник класса AppCompatActivity
@@ -27,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     // Свойство с поздней инициализацией для использования библиотеки viewBinding
     private lateinit var activityMainBinding: ActivityMainBinding
 
+    // Свойство с поздней инициализацией, отвечающее за работу с ViewModel
+    private lateinit var mainActivityViewModel: MainActivityViewModel
+
     // Метод onCreate - запускается самым первым при старте активности, либо после вызова onPause
     // Создает объекты пользовательского интерфейса перед показом пользователю
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +41,10 @@ class MainActivity : AppCompatActivity() {
 
         // Инициализация свойства binding
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+
+        // Инициализация viewModel
+        val viewModelProvider = ViewModelProvider(this)
+        mainActivityViewModel = viewModelProvider[MainActivityViewModel::class.java]
 
         // Присвоение свойству toast значения из Bundle хранилища с ключом TOAST
         if (savedInstanceState != null)
@@ -103,13 +113,7 @@ class MainActivity : AppCompatActivity() {
 
         // Работа со Switch
         activityMainBinding.switch1.setOnClickListener {
-            if (activityMainBinding.switch1.isChecked) {
-                activityMainBinding.switch1.isChecked = true
-                activityMainBinding.switch1.text = "Включено"
-            } else {
-                activityMainBinding.switch1.isChecked = false
-                activityMainBinding.switch1.text = "Выключено"
-            }
+            mainActivityViewModel.switch(activityMainBinding)
         }
 
         // Работа со Spinner
@@ -126,6 +130,29 @@ class MainActivity : AppCompatActivity() {
         )
         // Загрузка созданного адаптера в Spinner
         activityMainBinding.spinner.adapter = spinnerAdapter
+
+        // Работа с ресурсами проекта в коде
+        activityMainBinding.button2.setOnClickListener {
+            activityMainBinding.button2.text = getString(R.string.example)
+            activityMainBinding.button2.setTextColor(getColor(R.color.blue))
+            activityMainBinding.button2.setBackgroundColor(getColor(R.color.white))
+        }
+
+        // Отображение введенного текста в textView3
+        activityMainBinding.floatingActionButton.setOnClickListener {
+            activityMainBinding.textView3?.text = activityMainBinding.editTextText.text
+        }
+
+        // Слушатель введенного текста в EditText
+        activityMainBinding.editTextText.addTextChangedListener {
+            // Отображение введенного текса в textView4 в реальном времени
+            mainActivityViewModel.getEditText().value = it.toString()
+        }
+
+        // Создание наблюдателя за свойством editText
+        mainActivityViewModel.getEditText().observe(this, Observer {
+            activityMainBinding.textView4.text = it.toString()
+        })
     }
 
     // Метод onStart - запускается после onCreate

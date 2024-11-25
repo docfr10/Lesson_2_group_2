@@ -1,8 +1,11 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources>
+    <!-- Используемая тема приложения -->
     <style name="Base.Theme.Lesson_2_group_2" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- Цвет фона приложения -->
+        <item name="android:background">#ADACAC</item>
     </style>
 
     <style name="Theme.Lesson_2_group_2" parent="Base.Theme.Lesson_2_group_2" />
