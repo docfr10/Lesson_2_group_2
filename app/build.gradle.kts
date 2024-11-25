@@ -9,6 +9,11 @@ android {
     namespace = "com.example.lesson_2_group_2"
     compileSdk = 35
 
+    // Включение библиотеки viewBinding
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.example.lesson_2_group_2"
         minSdk = 23

@@ -3,6 +3,7 @@ package com.example.lesson_2_group_2
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.lesson_2_group_2.databinding.ActivityMainBinding
 
 // Класс MainActivity, наследник класса AppCompatActivity
 class MainActivity : AppCompatActivity() {
@@ -22,11 +24,17 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Кнопка нажата через параметр onClick", Toast.LENGTH_SHORT).show()
     }
 
+    // Свойство с поздней инициализацией для использования библиотеки viewBinding
+    private lateinit var activityMainBinding: ActivityMainBinding
+
     // Метод onCreate - запускается самым первым при старте активности, либо после вызова onPause
     // Создает объекты пользовательского интерфейса перед показом пользователю
     override fun onCreate(savedInstanceState: Bundle?) {
         // Вызов родительского метода onCreate
         super.onCreate(savedInstanceState)
+
+        // Инициализация свойства binding
+        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
 
         // Присвоение свойству toast значения из Bundle хранилища с ключом TOAST
         if (savedInstanceState != null)
@@ -37,7 +45,10 @@ class MainActivity : AppCompatActivity() {
 
         // Опредялет то,как будет выглядеть экран активности
         // Содержит ссылку на xml файл с разметкой
-        setContentView(R.layout.activity_main)
+        // setContentView(R.layout.activity_main)
+
+        // Аналогичная ссылка на макет пользовательского интерфейса с библиотекой viewBinding
+        setContentView(activityMainBinding.root)
 
         // Определение отступов экрана
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -75,8 +86,46 @@ class MainActivity : AppCompatActivity() {
             button.text = "Button"
         }
 
+        // Слушатель нажатий, который реагирует на долгое нажатие
+        button.setOnLongClickListener {
+            button.text = "Long click!"
+            return@setOnLongClickListener true
+        }
+
         // Смена изображения в ImageView
         imageView.setImageResource(R.drawable.ic_launcher_background)
+
+        // Использование объекта activityMainBinding
+        // Обработка введеного в EditText текста
+        Log.i("EDIT_TEXT", activityMainBinding.editTextText.text.toString())
+        // Смена текста в EditText
+        activityMainBinding.editTextPhone.setText("1234")
+
+        // Работа со Switch
+        activityMainBinding.switch1.setOnClickListener {
+            if (activityMainBinding.switch1.isChecked) {
+                activityMainBinding.switch1.isChecked = true
+                activityMainBinding.switch1.text = "Включено"
+            } else {
+                activityMainBinding.switch1.isChecked = false
+                activityMainBinding.switch1.text = "Выключено"
+            }
+        }
+
+        // Работа со Spinner
+        // Создание адаптера, который будет содержать список, содержащийся в Spinner
+        val spinnerAdapter = ArrayAdapter(
+            this,
+            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+            listOf(
+                "Kotlin",
+                "Java",
+                "Python",
+                "PHP"
+            )
+        )
+        // Загрузка созданного адаптера в Spinner
+        activityMainBinding.spinner.adapter = spinnerAdapter
     }
 
     // Метод onStart - запускается после onCreate
